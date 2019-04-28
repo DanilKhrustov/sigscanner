@@ -1,14 +1,128 @@
-import React from 'react';
-import { ExpoConfigView } from '@expo/samples';
+import Expo from 'expo';
+import * as ExpoPixi from 'expo-pixi';
+import React, { Component } from 'react';
+import { Image, Button, Platform, AppState, StyleSheet, Text, View } from 'react-native';
 
-export default class SettingsScreen extends React.Component {
-  static navigationOptions = {
-    title: 'app.json',
+const isAndroid = Platform.OS === 'android';
+
+
+export default class App extends Component {
+  state = {
+    image: null,
+    strokeColor: Math.random() * 0xffffff,
+    strokeWidth: Math.random() * 30 + 10,
+    lines: [
+      {
+        points: [{ x: 300, y: 300 }, { x: 600, y: 300 }, { x: 450, y: 600 }, { x: 300, y: 300 }],
+        color: 0xff00ff,
+        alpha: 1,
+        width: 10,
+      },
+    ],
+    appState: AppState.currentState,
+  };
+
+  handleAppStateChangeAsync = nextAppState => {
+    if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
+      if (isAndroid && this.sketch) {
+        this.setState({ appState: nextAppState, lines: this.sketch.lines });
+        return;
+      }
+    }
+    this.setState({ appState: nextAppState });
+  };
+
+  componentDidMount() {
+    AppState.addEventListener('change', this.handleAppStateChangeAsync);
+  }
+
+  componentWillUnmount() {
+    AppState.removeEventListener('change', this.handleAppStateChangeAsync);
+  }
+
+  onChangeAsync = async () => {
+    const { uri } = await this.sketch.takeSnapshotAsync();
+
+    this.setState({
+      image: { uri },
+      strokeWidth: Math.random() * 30 + 10,
+      strokeColor: Math.random() * 0xffffff,
+    });
+  };
+
+  onReady = () => {
+    console.log('ready!');
   };
 
   render() {
-    /* Go ahead and delete ExpoConfigView and replace it with your
-     * content, we just wanted to give you a quick view of your config */
-    return <ExpoConfigView />;
+    return (
+      <View style={styles.container}>
+        <View style={styles.container}>
+          <View style={styles.sketchContainer}>
+            <ExpoPixi.Sketch
+              ref={ref => (this.sketch = ref)}
+              style={styles.sketch}
+              strokeColor={this.state.strokeColor}
+              strokeWidth={this.state.strokeWidth}
+              strokeAlpha={1}
+              onChange={this.onChangeAsync}
+              onReady={this.onReady}
+              initialLines={this.state.lines}
+            />
+            <View style={styles.label}>
+              <Text>Canvas - draw here</Text>
+            </View>
+          </View>
+          <View style={styles.imageContainer}>
+            <View style={styles.label}>
+              <Text>Snapshot</Text>
+            </View>
+            <Image style={styles.image} source={this.state.image} />
+          </View>
+        </View>
+        <Button
+          color={'blue'}
+          title="undo"
+          style={styles.button}
+          onPress={() => {
+            this.sketch.undo();
+          }}
+        />
+      </View>
+    );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  sketch: {
+    flex: 1,
+  },
+  sketchContainer: {
+    height: '50%',
+  },
+  image: {
+    flex: 1,
+  },
+  imageContainer: {
+    height: '50%',
+    borderTopWidth: 4,
+    borderTopColor: '#E44262',
+  },
+  label: {
+    width: '100%',
+    padding: 5,
+    alignItems: 'center',
+  },
+  button: {
+    // position: 'absolute',
+    // bottom: 8,
+    // left: 8,
+    zIndex: 1,
+    padding: 12,
+    minWidth: 56,
+    minHeight: 48,
+  },
+});

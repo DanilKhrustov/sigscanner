@@ -1,6 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { Alert, Button, StyleSheet, Text, View, Image } from 'react-native';
 import Signature from 'react-native-signature-canvas';
+import { MediaLibrary, takeSnapshotAsync } from 'expo'
 
 export default class SignatureScreen extends React.Component {
   constructor(props) {
@@ -30,15 +31,25 @@ export default class SignatureScreen extends React.Component {
           ) : null}
         </View>
         <Signature
+          style={styles.signature}
           onOK={this.handleSignature}
           descriptionText="Sign"
           clearText="Clear"
           confirmText="Save"
           webStyle={style}
         />
+         <Button title="Save Signature" onPress={this._saveImage} />
       </View>
     );
   }
+  _saveImage = async () => {
+    let result = await takeSnapshotAsync(this._signature, {
+      format: 'png',
+      result: 'file',
+    });
+    await MediaLibrary.createAssetAsync(result)
+    Alert.alert('Signature saved!');
+  };
 }
 
 const styles = StyleSheet.create({

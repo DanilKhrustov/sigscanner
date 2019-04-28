@@ -1,6 +1,7 @@
 import React from 'react';
 import { Alert, Button, Image, View } from 'react-native';
-import { ImagePicker, MediaLibrary } from 'expo';
+import { ImagePicker, MediaLibrary, takeSnapshotAsync } from 'expo';
+
 
 export default class GalleryScreen extends React.Component {
   state = {
@@ -16,12 +17,11 @@ export default class GalleryScreen extends React.Component {
           title="Pick an image from camera roll"
           onPress={this._pickImage}
         />
-        {image &&
-          <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
-        <Button 
-            title="Save cropped photo"
-            onPress={this._saveImage}
-        />
+        {image && (
+          <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
+        )}
+        <Button title="Save cropped photo" onPress={this._saveImage} />
+
       </View>
     );
   }
@@ -39,7 +39,7 @@ export default class GalleryScreen extends React.Component {
     }
   };
   _saveImage = async () => {
-      await MediaLibrary.createAssetAsync(this.state.image)
-      Alert.alert('Cropped photo saved!')
-  }
+    await MediaLibrary.createAssetAsync(this.state.image);
+    Alert.alert('Cropped photo saved!');
+  };
 }
