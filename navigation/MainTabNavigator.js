@@ -7,6 +7,7 @@ import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import CameraScreen from '../screens/CameraScreen'
+import GalleryScreen from '../screens/GalleryScreen'
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -25,6 +26,20 @@ HomeStack.navigationOptions = {
     />
   ),
 };
+
+const GalleryStack = createStackNavigator({
+  Gallery: GalleryScreen,
+});
+
+GalleryStack.navigationOptions = {
+  tabBarLabel: 'Gallery',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
+      />
+  )
+}
 
 const CameraStack = createStackNavigator({
   Camera: CameraScreen,
@@ -72,5 +87,6 @@ export default createBottomTabNavigator({
   HomeStack,
   LinksStack,
   SettingsStack,
-  CameraStack
+  CameraStack,
+  GalleryStack,
 });

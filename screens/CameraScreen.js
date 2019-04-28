@@ -5,8 +5,6 @@ import { Camera, FileSystem, MediaLibrary, Permissions } from 'expo';
 export default class CameraExample extends React.Component {
   state = {
     rollGranted: false,
-    hasCameraPermission: null,
-    type: Camera.Constants.Type.back,
   };
 
   async componentDidMount() {
