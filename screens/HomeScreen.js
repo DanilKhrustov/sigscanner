@@ -11,7 +11,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import CameraButton from '../components/CameraButton'
 import { WebBrowser } from 'expo';
 
 import { MonoText } from '../components/StyledText';
@@ -40,28 +39,18 @@ export default class HomeScreen extends React.Component {
           <View style={styles.getStartedContainer}>
             {/* {this._maybeRenderDevelopmentModeWarning()} */}
 
-            <Text style={styles.getStartedText}>HELLO FROM FRONT!</Text>
-
-            <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
-              <MonoText style={styles.codeHighlightText}>screens/HomeScreen.js</MonoText>
-            </View>
+            <Text style={styles.getStartedText}>Welcome to SigScanner!</Text>
 
             <Text style={styles.getStartedText}>
-              Change this text and your app will automatically TEST.
+              Explore the tabs below to make documents scans and e-sign them.
             </Text>
           </View>
 
           
         </ScrollView>
 
-        <CameraButton style= {{padding: '10%', alignSelf: 'center'}} > Camera </CameraButton>
-
         <View style={styles.tabBarInfoContainer}>
-          <Text style={styles.tabBarInfoText}>This is a tab bar. You can edit it in:</Text>
-
-          <View style={[styles.codeHighlightContainer, styles.navigationFilename]}>
-            <MonoText style={styles.codeHighlightText}>navigation/MainTabNavigator.js</MonoText>
-          </View>
+          <View style={[styles.codeHighlightContainer, styles.navigationFilename]} />
         </View>
       </View>
     );

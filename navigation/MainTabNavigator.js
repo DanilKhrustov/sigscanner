@@ -4,7 +4,7 @@ import { createStackNavigator, createBottomTabNavigator } from 'react-navigation
 
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
-import LinksScreen from '../screens/LinksScreen';
+import SignatureScreen from '../screens/SignatureScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import CameraScreen from '../screens/CameraScreen'
 import GalleryScreen from '../screens/GalleryScreen'
@@ -55,12 +55,12 @@ CameraStack.navigationOptions = {
   )
 }
 
-const LinksStack = createStackNavigator({
-  Links: LinksScreen,
+const SigStack = createStackNavigator({
+  Signature: SignatureScreen,
 });
 
-LinksStack.navigationOptions = {
-  tabBarLabel: 'Links',
+SigStack.navigationOptions = {
+  tabBarLabel: 'Signature Pad',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
@@ -85,7 +85,7 @@ SettingsStack.navigationOptions = {
 
 export default createBottomTabNavigator({
   HomeStack,
-  LinksStack,
+  SigStack,
   SettingsStack,
   CameraStack,
   GalleryStack,
